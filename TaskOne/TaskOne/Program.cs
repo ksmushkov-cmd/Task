@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 public class TaxPayer
 {
@@ -121,3 +120,75 @@ class Program
         Console.WriteLine("\nНажмите любую клавишу для возврата в меню...");
         Console.ReadKey();
     }
+    // ================= ЗАДАНИЕ №2 =================
+    static void RunTask2()
+    {
+        Console.Clear();
+        Console.WriteLine("=== Задание №2: Налогоплательщики ===\n");
+
+        string filePath = "taxpayers.csv";
+
+        // ---------- ЧАСТЬ А: Генерация и запись ----------
+        Console.WriteLine("Часть А: Генерация данных и запись в CSV...");
+
+        var people = new List<TaxPayer>
+            {
+                new TaxPayer { LastName = "Иванов",   FirstName = "Иван",     AnnualIncome = 15000 },
+                new TaxPayer { LastName = "Петров",   FirstName = "Пётр",     AnnualIncome = 25000 },
+                new TaxPayer { LastName = "Сидоров",  FirstName = "Сидор",    AnnualIncome = 50000 },
+                new TaxPayer { LastName = "Кузнецов", FirstName = "Алексей",  AnnualIncome = 39000 },
+                new TaxPayer { LastName = "Смирнова", FirstName = "Анна",     AnnualIncome = 20000 }
+            };
+
+        // Запись в CSV: 'using' гарантирует закрытие файла даже при ошибке
+        using (StreamWriter writer = new StreamWriter(filePath))
+        {
+            writer.WriteLine("LastName;FirstName;AnnualIncome"); // заголовок
+            foreach (var p in people)
+            {
+                writer.WriteLine($"{p.LastName};{p.FirstName};{p.AnnualIncome}");
+            }
+        }
+        Console.WriteLine($"Файл '{filePath}' успешно создан.\n");
+
+        // ---------- ЧАСТЬ Б: Чтение и расчёт ----------
+        Console.WriteLine("Часть Б: Чтение файла и расчёт налога\n");
+        Console.WriteLine("--------------------------------------------------------");
+        Console.WriteLine("{0,-12} {1,-10} {2,-12} {3,-12}", "Фамилия", "Имя", "Доход", "Налог");
+        Console.WriteLine("--------------------------------------------------------");
+
+        if (File.Exists(filePath))
+        {
+            // --- Сложный момент ---
+            // Skip(1) пропускает строку-заголовок, чтобы не парсить слово "AnnualIncome"
+            var lines = File.ReadAllLines(filePath).Skip(1);
+
+            foreach (var line in lines)
+            {
+                var parts = line.Split(';'); // разбиваем CSV-строку по ';'
+
+                if (parts.Length == 3)
+                {
+                    var p = new TaxPayer
+                    {
+                        LastName = parts[0],
+                        FirstName = parts[1],
+                        AnnualIncome = double.Parse(parts[2])
+                    };
+
+                    double tax = p.CalculateTax();
+                    Console.WriteLine("{0,-12} {1,-10} {2,-12:F2} {3,-12:F2}",
+                        p.LastName, p.FirstName, p.AnnualIncome, tax);
+                }
+            }
+        }
+        else
+        {
+            Console.WriteLine("Файл не найден!");
+        }
+
+        Console.WriteLine("--------------------------------------------------------");
+        Console.WriteLine("\nНажмите любую клавишу для возврата в меню...");
+        Console.ReadKey();
+    }
+}
