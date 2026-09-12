@@ -34,3 +34,40 @@ public class TaxPayer
         }
     }
 }
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Бесконечный цикл меню, пока пользователь не выберет выход
+        while (true)
+        {
+            Console.Clear();
+            Console.WriteLine("==================================================");
+            Console.WriteLine("         ЛАБОРАТОРНАЯ РАБОТА — МЕНЮ");
+            Console.WriteLine("==================================================");
+            Console.WriteLine("  1 — Задание №1 (прямая, поиск xk)");
+            Console.WriteLine("  2 — Задание №2 (налогоплательщики, CSV)");
+            Console.WriteLine("  0 — Выход");
+            Console.WriteLine("==================================================");
+            Console.Write("Ваш выбор: ");
+
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    RunTask1();
+                    break;
+                case "2":
+                    RunTask2();
+                    break;
+                case "0":
+                    return; // выход из программы
+                default:
+                    Console.WriteLine("Неверный выбор. Нажмите любую клавишу...");
+                    Console.ReadKey();
+                    break;
+            }
+        }
+    }
