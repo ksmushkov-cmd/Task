@@ -71,3 +71,53 @@ class Program
             }
         }
     }
+    static void RunTask1()
+    {
+        Console.Clear();
+        Console.WriteLine("=== Задание №1: Нахождение xk ===");
+        Console.WriteLine("Уравнение прямой: y = a*x + b\n");
+
+        try
+        {
+            Console.Write("Введите параметр a: ");
+            double a = double.Parse(Console.ReadLine());
+
+            Console.Write("Введите параметр b: ");
+            double b = double.Parse(Console.ReadLine());
+
+            Console.Write("Введите ординату y1: ");
+            double y1 = double.Parse(Console.ReadLine());
+
+            Console.Write("Введите ординату y2: ");
+            double y2 = double.Parse(Console.ReadLine());
+
+            // Проверка деления на ноль
+            if (a == 0)
+            {
+                Console.WriteLine("Ошибка: параметр 'a' не может быть равен 0.");
+                Console.ReadKey();
+                return;
+            }
+
+            // Находим x1 и x2 из уравнения прямой: x = (y - b) / a
+            double x1 = (y1 - b) / a;
+            double x2 = (y2 - b) / a;
+
+            // --- Сложный момент ---
+            // Т.к. |x1 - xk| = |x2 - xk|, точка xk — середина отрезка [x1, x2]
+            double xk = (x1 + x2) / 2.0;
+
+            Console.WriteLine("\n=== Результаты ===");
+            Console.WriteLine($"x1 = {x1:F4}");
+            Console.WriteLine($"x2 = {x2:F4}");
+            Console.WriteLine($"Искомое xk = {xk:F4}");
+            Console.WriteLine($"\n(Справка: Math.PI = {Math.PI})");
+        }
+        catch (FormatException)
+        {
+            Console.WriteLine("Ошибка: нужно вводить числа.");
+        }
+
+        Console.WriteLine("\nНажмите любую клавишу для возврата в меню...");
+        Console.ReadKey();
+    }
